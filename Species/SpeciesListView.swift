@@ -14,9 +14,13 @@ struct SpeciesListView: View {
         NavigationStack {
             List {
                 ForEach(speciesVM.speciesArray, id: \.self) { species in
-                    Text(species.name)
-                        .font(.title)
+                    NavigationLink {
+                        SpeciesDetailView(species: species)                      }  label: {
+                            Text(" \(species.name.capitalized)")
+                                .font(.title2)
+                        }
                 }
+                
             }
             .onAppear {
                 Task {
