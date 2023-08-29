@@ -25,7 +25,11 @@ struct SpeciesDetailView: View {
                 .foregroundColor(.gray)
                 .padding(.bottom)
             
-            
+            HStack {
+                Spacer()
+                speciesImage
+                Spacer()
+            }
             Group {
                 HStack (alignment: .top) {
                     Text("Classification:")
@@ -85,6 +89,50 @@ struct SpeciesDetailView: View {
     }
 }
 
+extension SpeciesDetailView {
+    var speciesImage: some View {
+        AsyncImage(url: URL(string: "https://gallaugher.com/wp-content/uploads/2023/04/\(speciesDetailVM.name).jpg")) { phase in
+            if let image = phase.image { //we have a valid image
+                let _ = print("VALID IMAGE ***") //this allows us to have a print statement in code that doesn't normally allow it!
+                image
+                    .resizable()
+                    .scaledToFit()
+                    .backgroundStyle(.white)
+                    .frame(width: 96, height: 96)
+                    .cornerRadius(15)
+                    .shadow(radius: 15, x: 5, y: 5)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(.gray.opacity(0.5), lineWidth: 1)
+                    }
+                    .padding(.trailing)
+                
+            } else if phase.error != nil { // we have an error
+                let _ = print("!!! ERROR LOADING IMAGE !!")
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .backgroundStyle(.white)
+                    .frame(width: 96, height: 96)
+                    .cornerRadius(15)
+                    .shadow(radius: 15, x: 5, y: 5)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(.gray.opacity(0.5), lineWidth: 1)
+                    }
+                    .padding(.trailing)
+                
+            } else { //use a placeholder
+                let _ = print("Placeholdder IMAGE !!")
+                Rectangle()
+                    .foregroundColor(.clear)
+                    .frame(width: 96, height: 96)
+                
+            }
+        }
+        
+    }
+}
 
 struct SpeciesDetailView_Previews: PreviewProvider {
     static var previews: some View {

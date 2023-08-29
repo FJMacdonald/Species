@@ -11,6 +11,7 @@ import Foundation
 class SpeciesDetailViewModel: ObservableObject {
     
     private struct Returned: Codable {
+        var name: String?
         var classification: String?
         var designation: String?
         var average_height: String?
@@ -20,7 +21,7 @@ class SpeciesDetailViewModel: ObservableObject {
         var hair_colors: String?
         var eye_colors: String?
    }
-    
+    @Published var name = ""
     @Published var urlString = ""
     @Published var classification = ""
     @Published var designation = ""
@@ -47,6 +48,7 @@ class SpeciesDetailViewModel: ObservableObject {
                 print("😡 JSON ERROR: Could not deccode returned JSON data")
                 return
             }
+            self.name = returned.name ?? ""
             self.classification = returned.classification ?? ""
             self.designation = returned.designation ?? ""
             self.average_height = returned.average_height ?? ""
