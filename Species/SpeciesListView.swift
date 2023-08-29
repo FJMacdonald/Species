@@ -12,15 +12,21 @@ struct SpeciesListView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(speciesVM.speciesArray, id: \.self) { species in
-                    NavigationLink {
-                        SpeciesDetailView(species: species)                      }  label: {
-                            Text(" \(species.name.capitalized)")
-                                .font(.title2)
-                        }
+            ZStack {
+                List {
+                    ForEach(speciesVM.speciesArray, id: \.self) { species in
+                        NavigationLink {
+                            SpeciesDetailView(species: species)                      }  label: {
+                                Text(" \(species.name.capitalized)")
+                                    .font(.title2)
+                            }
+                    }
                 }
-                
+                if speciesVM.isLoading {
+                    ProgressView()
+                        .tint(.green)
+                        .scaleEffect(4)
+                }
             }
             .onAppear {
                 Task {
