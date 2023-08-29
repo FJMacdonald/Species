@@ -22,6 +22,12 @@ struct SpeciesListView: View {
                             }
                     }
                 }
+                .toolbar {
+
+                    ToolbarItem(placement: .status) {
+                        Text("\(speciesVM.speciesArray.count) Species Returned")
+                    }
+                }
                 if speciesVM.isLoading {
                     ProgressView()
                         .tint(.green)
