@@ -41,20 +41,19 @@ class SpeciesViewModel: ObservableObject {
             }
             self.count = returned.count
             self.urlString = returned.next ?? ""
-            self.speciesArray =  returned.results
+            self.speciesArray =  self.speciesArray + returned.results
             isLoading = false
-//            self.speciesArray =  self.speciesArray + returned.results
         } catch {
             print("😡 ERROR: Could not get data from \(urlString)")
             isLoading = false
         }
     }
-    func loadNextIfNeeded(species: Species) {
-        guard let lastSpecies = speciesArray.last else { return}
-        if species.id == lastSpecies.id && urlString.hasPrefix("http") {
-            Task {
-                await getData ()
-            }
-        }
-    }
+//    func loadNextIfNeeded(species: Species) {
+//        guard let lastSpecies = speciesArray.last else { return}
+//        if species.id == lastSpecies.id && urlString.hasPrefix("http") {
+//            Task {
+//                await getData()
+//            }
+//        }
+//    }
 }

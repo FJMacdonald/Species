@@ -9,21 +9,35 @@ import SwiftUI
 
 struct SpeciesListView: View {
     @StateObject var speciesVM = SpeciesViewModel()
-
+    
     var body: some View {
         NavigationStack {
             ZStack {
-                List {
+                List{
                     ForEach(speciesVM.speciesArray, id: \.self) { species in
-                        NavigationLink {
-                            SpeciesDetailView(species: species)                      }  label: {
+                        LazyVStack {
+                            NavigationLink {
+                                SpeciesDetailView(species: species)
+                            }  label: {
                                 Text(" \(species.name.capitalized)")
                                     .font(.title2)
                             }
+                        }
+                        .onAppear {
+                            if let lastSpecies = speciesVM.speciesArray.last {
+                                if species.id == lastSpecies.id && speciesVM.urlString.hasPrefix("http") {
+                                    Task {
+                                        await speciesVM.getData()
+                                    }//speciesVM.loadNextIfNeeded(species: species)
+                                }
+                            }
+                        }
                     }
                 }
+                .listStyle(.plain)
+                .navigationBarTitle("Species")
+                
                 .toolbar {
-
                     ToolbarItem(placement: .status) {
                         Text("\(speciesVM.speciesArray.count) Species Returned")
                     }
@@ -39,9 +53,8 @@ struct SpeciesListView: View {
                     await speciesVM.getData()
                 }
             }
-           .listStyle(.plain)
-            .navigationBarTitle("Species")
         }
+        
     }
 }
 
