@@ -90,8 +90,14 @@ struct SpeciesDetailView: View {
 }
 
 extension SpeciesDetailView {
+    func returnedSpeciesURL() -> String {
+        var speciesString  = "https://gallaugher.com/wp-content/uploads/2023/04/\(speciesDetailVM.name).jpg"
+        speciesString.replace(" ", with: "-")
+        speciesString.replace("'", with: "")
+        return speciesString
+    }
     var speciesImage: some View {
-        AsyncImage(url: URL(string: "https://gallaugher.com/wp-content/uploads/2023/04/\(speciesDetailVM.name).jpg")) { phase in
+        AsyncImage(url: URL(string: returnedSpeciesURL())) { phase in
             if let image = phase.image { //we have a valid image
                 let _ = print("VALID IMAGE ***") //this allows us to have a print statement in code that doesn't normally allow it!
                 image
