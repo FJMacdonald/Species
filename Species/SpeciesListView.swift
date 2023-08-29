@@ -8,16 +8,22 @@
 import SwiftUI
 
 struct SpeciesListView: View {
-    var testArray = ["Hutt", "Ewok", "Wookie","Droid", "Human"]
+    @StateObject var speciesVM = SpeciesViewModel()
+
     var body: some View {
         NavigationStack {
             List {
-                ForEach(testArray, id: \.self) { item in
-                    Text(item)
+                ForEach(speciesVM.speciesArray, id: \.self) { species in
+                    Text(species.name)
                         .font(.title)
                 }
             }
-            .listStyle(.plain)
+            .onAppear {
+                Task {
+                    await speciesVM.getData()
+                }
+            }
+           .listStyle(.plain)
             .navigationBarTitle("Species")
         }
     }
