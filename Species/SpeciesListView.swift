@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import AVFAudio
 
 struct SpeciesListView: View {
     @StateObject var speciesVM = SpeciesViewModel()
+    @State var audioPlayer: AVAudioPlayer!
     
     var body: some View {
         NavigationStack {
@@ -43,6 +45,16 @@ struct SpeciesListView: View {
                     ToolbarItem(placement: .status) {
                         Text("\(speciesVM.speciesArray.count) Species Returned")
                     }
+                    ToolbarItem(placement: .bottomBar) {
+                        Button {
+                            playSound(soundFile: "\(Int.random(in: 0...8))")
+                        } label: {
+                            Image("peek")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 25)
+                        }
+                    }
                 }
                 if speciesVM.isLoading {
                     ProgressView()
@@ -55,6 +67,19 @@ struct SpeciesListView: View {
                     await speciesVM.getData()
                 }
             }
+        }
+    }
+    func playSound(soundFile: String) {
+        // create a sound file object consisting of a set of one or more files with associated device attributes
+        guard let soundFile = NSDataAsset(name: soundFile) else {
+            print("Could not read file \(soundFile)")
+            return
+        }
+        do {
+            audioPlayer = try AVAudioPlayer(data: soundFile.data)
+            audioPlayer.play()
+        } catch {
+            print("Could not create audio player: \(error.localizedDescription)")
         }
         
     }
