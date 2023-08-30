@@ -48,12 +48,18 @@ class SpeciesViewModel: ObservableObject {
             isLoading = false
         }
     }
-//    func loadNextIfNeeded(species: Species) {
-//        guard let lastSpecies = speciesArray.last else { return}
-//        if species.id == lastSpecies.id && urlString.hasPrefix("http") {
-//            Task {
-//                await getData()
-//            }
-//        }
-//    }
+    func loadNextIfNeeded(species: Species) {
+        guard let lastSpecies = speciesArray.last else { return}
+        if species.id == lastSpecies.id && urlString.hasPrefix("http") {
+            Task {
+                await getData()
+            }
+        }
+    }
+    func loadAll() async {
+        guard urlString.hasPrefix("http") else {return}
+        await getData() // get next page off data
+        await loadAll() // call loadAll again (will stop once all pages have been retrieved)
+    }
+
 }

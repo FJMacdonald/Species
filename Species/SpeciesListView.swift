@@ -24,13 +24,7 @@ struct SpeciesListView: View {
                             }
                         }
                         .onAppear {
-                            if let lastSpecies = speciesVM.speciesArray.last {
-                                if species.id == lastSpecies.id && speciesVM.urlString.hasPrefix("http") {
-                                    Task {
-                                        await speciesVM.getData()
-                                    }//speciesVM.loadNextIfNeeded(species: species)
-                                }
-                            }
+                            speciesVM.loadNextIfNeeded(species: species)
                         }
                     }
                 }
@@ -38,6 +32,14 @@ struct SpeciesListView: View {
                 .navigationBarTitle("Species")
                 
                 .toolbar {
+                    ToolbarItem(placement: .bottomBar) {
+                        Button("Load All") {
+                            Task {
+                                await speciesVM.loadAll()
+                            }
+                        }
+                        .bold()
+                    }
                     ToolbarItem(placement: .status) {
                         Text("\(speciesVM.speciesArray.count) Species Returned")
                     }
